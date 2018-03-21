@@ -1,4 +1,3 @@
-// Lab2.java
 
 package navigation;
 
@@ -14,7 +13,6 @@ import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.hardware.sensor.SensorModes;
 import lejos.robotics.SampleProvider;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Lab5.
  */
