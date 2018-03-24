@@ -58,7 +58,7 @@ public class UltrasonicLocalizer extends Thread /* implements Runnable */{
 	private static int A_SPEED = 100;
 
 	/** The Rotationspeed. */
-	private static int Rotationspeed = 100;
+	private static int Rotationspeed = 50;
 
 	/** The d. */
 	private int d = 40; 
@@ -114,70 +114,7 @@ public class UltrasonicLocalizer extends Thread /* implements Runnable */{
 
 	}
 
-	/**
-	 * Turn risingedege.
-	 */
-	public void turnRisingedege() {  //wall to void
-		
-		
-		
-		// turn right all the way round && don't wait for finish turn
-
-		
-		
-		
-		leftMotor.rotate( convertAngle(DpmFinal.WHEEL_RAD, DpmFinal.TRACK, 720),true);
-		rightMotor.rotate( -convertAngle(DpmFinal.WHEEL_RAD, DpmFinal.TRACK, 720),true);
-
 	
-		
-		
-
-		while (getdistance() < d + k) {
-
-			// keep turning right
-
-		}
-
-		Sound.beep();// see first wall
-		
-		leftMotor.stop(true);// stop the robot
-		rightMotor.stop(true);
-
-		odometer.setTheta(0);
-		
-		
-		
-		
-		//adjustment to ensure  escaping the rising edge
-		leftMotor.rotate(-convertAngle(DpmFinal.WHEEL_RAD, DpmFinal.TRACK, 720),true);
-		rightMotor.rotate( convertAngle(DpmFinal.WHEEL_RAD, DpmFinal.TRACK, 720),false);
-		
-		// travel towards the next wall. by turning left
-		leftMotor.rotate(-convertAngle(DpmFinal.WHEEL_RAD, DpmFinal.TRACK, 720),true);
-		rightMotor.rotate( convertAngle(DpmFinal.WHEEL_RAD, DpmFinal.TRACK, 720),true);
-		
-		
-
-
-		
-		while (getdistance() < d + k) {
-			
-			//keep turning
-
-		} 
-		leftMotor.stop(true);// find rising edge && stop the robot
-		rightMotor.stop(true);
-		
-		double heading = odometer.getXYT()[2] / 2;
-		odometer.setTheta(240 - heading); 
-															
-
-		
-		turnTo(0);
-
-	}
-
 	/**
 	 * Turn fallingedge.
 	 */
@@ -185,6 +122,9 @@ public class UltrasonicLocalizer extends Thread /* implements Runnable */{
 
 		// turn left all the way round && don'twait for finish turn
 		
+		
+		DpmFinal.leftMotor.setSpeed(Rotationspeed);
+		DpmFinal.rightMotor.setSpeed(Rotationspeed);
 		
 		leftMotor.rotate( -convertAngle(DpmFinal.WHEEL_RAD, DpmFinal.TRACK, 720),true);
 		rightMotor.rotate( convertAngle(DpmFinal.WHEEL_RAD, DpmFinal.TRACK, 720),true);
@@ -214,6 +154,7 @@ public class UltrasonicLocalizer extends Thread /* implements Runnable */{
 		// turn left all the way round && don'twait for finish turn
 		leftMotor.rotate( convertAngle(DpmFinal.WHEEL_RAD, DpmFinal.TRACK, 720),true);
 		rightMotor.rotate( -convertAngle(DpmFinal.WHEEL_RAD, DpmFinal.TRACK, 720),true);
+		
 
 		while (getdistance() > d - k) {
 
@@ -231,7 +172,7 @@ public class UltrasonicLocalizer extends Thread /* implements Runnable */{
 
 		odometer.setTheta(50 + heading);
 
-		turnTo(0);
+		turnTo(0, true);
 
 	}
 	
@@ -246,7 +187,8 @@ public class UltrasonicLocalizer extends Thread /* implements Runnable */{
 
 
 
-	public void turnTo(double theta) {
+	public void turnTo(double theta, boolean usLocalize) {
+		
 
 		double currentTheta = odometer.getXYT()[2];
 
@@ -266,9 +208,10 @@ public class UltrasonicLocalizer extends Thread /* implements Runnable */{
 			
 			//we want minimal angle
 		
-
+			
 			DpmFinal.leftMotor.rotate(
 					convertAngle(DpmFinal.WHEEL_RAD, DpmFinal.TRACK, dTheta), true);
+			
 			DpmFinal.rightMotor.rotate(
 					-convertAngle(DpmFinal.WHEEL_RAD, DpmFinal.TRACK, dTheta),
 					false);
@@ -280,10 +223,11 @@ public class UltrasonicLocalizer extends Thread /* implements Runnable */{
 			dTheta = 360 - dTheta;
 
 		
-
+			
 			DpmFinal.leftMotor
 					.rotate(-convertAngle(DpmFinal.WHEEL_RAD, DpmFinal.TRACK,
 							dTheta), true);
+			
 			DpmFinal.rightMotor
 					.rotate(convertAngle(DpmFinal.WHEEL_RAD, DpmFinal.TRACK, dTheta),
 							false);

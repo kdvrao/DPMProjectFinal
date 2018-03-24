@@ -83,8 +83,8 @@ public class DpmFinal {
 		
 		// get wifi parameters
 		
-		double [] tunnelLL = {3, 5};
-		double [] tunnelUR = {4, 7};
+		double [] tunnelLL = {1, 2};
+		double [] tunnelUR = {1, 2};
 		double [] bridgeLL = {7, 5};
 		double [] bridgeUR = {8, 7};
 
@@ -128,7 +128,7 @@ public class DpmFinal {
 			// traverse bridge from top to bottom
 			lightlocalizer.travelTo(bridgeUR[0] - 0.5, bridgeUR[1] + 0.5);
 			lightlocalizer.travelTo(bridgeLL[0] + 0.5, bridgeLL[1] - 0.5);
-			
+			Button.waitForAnyPress();
 			// change back to tunnel wheel base
 			
 			// search algorithm
@@ -153,8 +153,9 @@ public class DpmFinal {
 			// localize at corner
 			ultrasonicLocalizer.turnFallingedge();
 			Button.waitForAnyPress();
-			lightlocalizer.localization(); 
-			
+			//lightlocalizer.localization(); 
+			//Button.waitForAnyPress();
+			lightlocalizer.travelTo(2, 1);
 			
 			// traverse tunnel from bottom to top
 			lightlocalizer.travelTo(tunnelLL[0] + 0.5, tunnelLL[1] - 0.5);

@@ -151,9 +151,9 @@ public class LightLocalizer {
 		double initialX = odometer.getXYT()[0];
 		double initialY = odometer.getXYT()[1];
 
-		double deltaX = (x*30.40) - initialX;// distance need to be travelled in the x
+		double deltaX = (x*30.41) - initialX;// distance need to be travelled in the x
 										// direction
-		double deltaY = (y*30.40) - initialY;// distance need to be travelled in the y
+		double deltaY = (y*30.41) - initialY;// distance need to be travelled in the y
 										// direction
 
 		double destYheta;
