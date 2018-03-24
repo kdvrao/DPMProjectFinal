@@ -153,9 +153,9 @@ public class DpmFinal {
 			// localize at corner
 			ultrasonicLocalizer.turnFallingedge();
 			Button.waitForAnyPress();
-			//lightlocalizer.localization(); 
+			lightlocalizer.localization(); 
 			//Button.waitForAnyPress();
-			lightlocalizer.travelTo(2, 1);
+			
 			
 			// traverse tunnel from bottom to top
 			lightlocalizer.travelTo(tunnelLL[0] + 0.5, tunnelLL[1] - 0.5);

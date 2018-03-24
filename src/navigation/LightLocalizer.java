@@ -67,14 +67,16 @@ public class LightLocalizer {
 		double[] angle = new double[4];
 
 		turnTo(45);
+		
+		leftMotor.setSpeed(Rotationspeed);
+		rightMotor.setSpeed(Rotationspeed);
 
 		// move 15 cm near the 0,0
 
 		leftMotor.rotate(convertDistance(DpmFinal.WHEEL_RAD, 15), true);
 		rightMotor.rotate(convertDistance(DpmFinal.WHEEL_RAD, 15), false);
 
-		leftMotor.setSpeed(Rotationspeed);
-		rightMotor.setSpeed(Rotationspeed);
+		
 
 		// turn right
 		leftMotor.forward();
