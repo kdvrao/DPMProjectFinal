@@ -26,6 +26,8 @@ public class DpmFinal {
 	/** The Constant rightMotor. */
 	public static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(
 			LocalEV3.get().getPort("B"));
+	public static final EV3LargeRegulatedMotor middleMotor = new EV3LargeRegulatedMotor(
+			LocalEV3.get().getPort("C"));
 	
 	/** The Constant lcd. */
 	public static final TextLCD lcd = LocalEV3.get().getTextLCD();
@@ -43,7 +45,7 @@ public class DpmFinal {
 	public static final double WHEEL_RAD = 2.076;// wheel radius
 
 	/** The Constant TRACK. */
-	public static final double TRACK = 16;// 15.7
+	public static final double TRACK = 15;// 15.7
 	
 	
 	
@@ -92,7 +94,7 @@ public class DpmFinal {
 
 			// ask the user whether the motors should drive in a square or float
 			lcd.drawString("< Left | Right  >", 0, 0);
-			lcd.drawString(" for   |  for    ", 0, 1);
+			lcd.drawString(" for   |  FOR    ", 0, 1);
 			lcd.drawString("Bridge | Tunnel  ", 0, 2);
 			lcd.drawString(" then  |  then   ", 0, 3);
 			lcd.drawString("Tunnel | Bridge  ", 0, 4);
@@ -138,6 +140,7 @@ public class DpmFinal {
 		} else {
 
 			lcd.clear();
+			
 
 			// initialize odometer thread
 			Thread odoThread = new Thread(odometer);
@@ -149,6 +152,7 @@ public class DpmFinal {
 
 			// localize at corner
 			ultrasonicLocalizer.turnFallingedge();
+			Button.waitForAnyPress();
 			lightlocalizer.localization(); 
 			
 			
