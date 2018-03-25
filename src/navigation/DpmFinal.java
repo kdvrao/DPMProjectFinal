@@ -10,6 +10,7 @@ import lejos.hardware.port.Port;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
+import lejos.hardware.sensor.SensorMode;
 import lejos.hardware.sensor.SensorModes;
 import lejos.robotics.SampleProvider;
 
@@ -20,15 +21,12 @@ public class DpmFinal {
 
 	/** The Constant leftMotor. */
 	// Motor Objects, and Robot related parameters
-	public static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(
-			LocalEV3.get().getPort("A"));
-	
+	public static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("A"));
+
 	/** The Constant rightMotor. */
-	public static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(
-			LocalEV3.get().getPort("B"));
-	public static final EV3LargeRegulatedMotor middleMotor = new EV3LargeRegulatedMotor(
-			LocalEV3.get().getPort("C"));
-	
+	public static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
+	public static final EV3LargeRegulatedMotor middleMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
+
 	/** The Constant lcd. */
 	public static final TextLCD lcd = LocalEV3.get().getTextLCD();
 
@@ -46,47 +44,43 @@ public class DpmFinal {
 
 	/** The Constant TRACK. */
 	public static final double TRACK = 15;// 15.7
-	
-	
-	
+
 	/** The us sensor. */
-	static SensorModes usSensor = new EV3UltrasonicSensor(usPort); 
-	
+	static SensorModes usSensor = new EV3UltrasonicSensor(usPort);
+
 	/** The us distance. */
-	static SampleProvider usDistance = usSensor.getMode("Distance"); 
-																
+	static SampleProvider usDistance = usSensor.getMode("Distance");
+
 	/** The us data. */
 	static float[] usData = new float[usDistance.sampleSize()];
 
 	/**
 	 * The main method.
 	 *
-	 * @param args the arguments
-	 * @throws OdometerExceptions the odometer exceptions
+	 * @param args
+	 *            the arguments
+	 * @throws OdometerExceptions
+	 *             the odometer exceptions
 	 */
 	public static void main(String[] args) throws OdometerExceptions {
 
 		int buttonChoice;
 
+		Odometer odometer = Odometer.getOdometer(leftMotor, rightMotor, TRACK, WHEEL_RAD);
 
-		Odometer odometer = Odometer.getOdometer(leftMotor, rightMotor, TRACK,
-				WHEEL_RAD); 
+		UltrasonicLocalizer ultrasonicLocalizer = new UltrasonicLocalizer(leftMotor, rightMotor, odometer, usDistance,
+				usData);
 
-		UltrasonicLocalizer ultrasonicLocalizer = new UltrasonicLocalizer(
-				leftMotor, rightMotor, odometer, usDistance, usData);
-		
-		LightLocalizer lightlocalizer = new LightLocalizer(leftMotor,
-				 rightMotor, odometer,LS);
-		
+		LightLocalizer lightlocalizer = new LightLocalizer(leftMotor, rightMotor, odometer, LS);
+
 		Display odometryDisplay = new Display(lcd);
-		
-		
+
 		// get wifi parameters
-		
-		double [] tunnelLL = {1, 2};
-		double [] tunnelUR = {1, 2};
-		double [] bridgeLL = {7, 5};
-		double [] bridgeUR = {8, 7};
+
+		double[] tunnelLL = { 1, 2 };
+		double[] tunnelUR = { 1, 2 };
+		double[] bridgeLL = { 7, 5 };
+		double[] bridgeUR = { 8, 7 };
 
 		do {
 			// clear the display
@@ -99,40 +93,38 @@ public class DpmFinal {
 			lcd.drawString(" then  |  then   ", 0, 3);
 			lcd.drawString("Tunnel | Bridge  ", 0, 4);
 
-			buttonChoice = Button.waitForAnyPress(); 
-			
+			buttonChoice = Button.waitForAnyPress();
+
 			// ASSUMING DEFAULT WHEEL BASE IS TUNNEL BASE
-			
-		} while (buttonChoice != Button.ID_LEFT
-				&& buttonChoice != Button.ID_RIGHT);
+
+		} while (buttonChoice != Button.ID_LEFT && buttonChoice != Button.ID_RIGHT);
 
 		if (buttonChoice == Button.ID_LEFT) {
 
 			lcd.clear();
-			
+
 			// initialize odometer thread
 			Thread odoThread = new Thread(odometer);
 			odoThread.start();
-			
+
 			// initializer display thread
 			Thread odoDisplayThread = new Thread(odometryDisplay);
 			odoDisplayThread.start();
-			
+
 			// localize at corner
 			ultrasonicLocalizer.turnFallingedge();
-			lightlocalizer.localization(); 
-			
+			lightlocalizer.localization();
 
 			// change to bridge wheel base
-			
+
 			// traverse bridge from top to bottom
 			lightlocalizer.travelTo(bridgeUR[0] - 0.5, bridgeUR[1] + 0.5);
 			lightlocalizer.travelTo(bridgeLL[0] + 0.5, bridgeLL[1] - 0.5);
 			Button.waitForAnyPress();
 			// change back to tunnel wheel base
-			
+
 			// search algorithm
-			
+
 			// traverse tunnel from bottom to top
 			lightlocalizer.travelTo(tunnelLL[0] + 0.5, tunnelLL[1] - 0.5);
 			lightlocalizer.travelTo(tunnelUR[0] - 0.5, tunnelUR[1] + 0.5);
@@ -140,41 +132,45 @@ public class DpmFinal {
 		} else {
 
 			lcd.clear();
-			
 
 			// initialize odometer thread
 			Thread odoThread = new Thread(odometer);
 			odoThread.start();
-			
+
 			// initializer display thread
 			Thread odoDisplayThread = new Thread(odometryDisplay);
 			odoDisplayThread.start();
 
 			// localize at corner
-			ultrasonicLocalizer.turnFallingedge();
-			Button.waitForAnyPress();
-			lightlocalizer.localization(); 
+
+			//ultrasonicLocalizer.turnFallingedge();
 			//Button.waitForAnyPress();
-			
-			
+			lightlocalizer.localization();
+			Button.waitForAnyPress();
+			lightlocalizer.travelTo(0.5, 2.5);
+			lightlocalizer.turnTo(90.0);
+			// middleMotor.rotate(85);//expand
+			// leftMotor.rotate( 900,true);
+			// rightMotor.rotate( 900,false);
+
+			// lightlocalizer.travelTo(0, 3);
+
+			// middleMotor.rotate(-90);
+
 			// traverse tunnel from bottom to top
-			lightlocalizer.travelTo(tunnelLL[0] + 0.5, tunnelLL[1] - 0.5);
-			lightlocalizer.travelTo(tunnelUR[0] - 0.5, tunnelUR[1] + 0.5);
-			
+			// lightlocalizer.travelTo(tunnelLL[0] + 0.5, tunnelLL[1] - 0.5);
+			// lightlocalizer.travelTo(tunnelUR[0] - 0.5, tunnelUR[1] + 0.5);
+
 			// search algorithm
-			
+
 			// change to bridge wheel base
-			
+
 			// traverse bridge from top to bottom
-			lightlocalizer.travelTo(bridgeUR[0] - 0.5, bridgeUR[1] + 0.5);
-			lightlocalizer.travelTo(bridgeLL[0] + 0.5, bridgeLL[1] - 0.5);
-			
+			// lightlocalizer.travelTo(bridgeUR[0] - 0.5, bridgeUR[1] + 0.5);
+			// lightlocalizer.travelTo(bridgeLL[0] + 0.5, bridgeLL[1] - 0.5);
+
 			// change back to tunnel wheel base
 		}
-
-		
-
-		
 
 		while (Button.waitForAnyPress() != Button.ID_ESCAPE)
 			;
