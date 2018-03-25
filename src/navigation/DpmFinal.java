@@ -143,10 +143,10 @@ public class DpmFinal {
 
 			// localize at corner
 
-			//ultrasonicLocalizer.turnFallingedge();
+			ultrasonicLocalizer.turnFallingedge();
 			//Button.waitForAnyPress();
 			lightlocalizer.localization();
-			Button.waitForAnyPress();
+			//Button.waitForAnyPress();
 			lightlocalizer.travelTo(0.5, 2.5);
 			lightlocalizer.turnTo(90.0);
 			// middleMotor.rotate(85);//expand

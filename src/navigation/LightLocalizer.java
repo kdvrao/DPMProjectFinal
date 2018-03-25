@@ -58,22 +58,21 @@ public class LightLocalizer {
   leftMotor.setSpeed(Rotationspeed);
   rightMotor.setSpeed(Rotationspeed);
   // turn right continuously
-  //leftMotor.forward();
-  //rightMotor.backward();
+  leftMotor.forward();
+  rightMotor.backward();
   int i = 0;
 
-  SensorMode colorID;
-  colorID = LS.getRGBMode();
-  float[] oldSample = new float[colorID.sampleSize()];
-  float[] newSample = new float[colorID.sampleSize()];
 
-  colorID.fetchSample(newSample, 0);
-  oldSample[0] = newSample[0];
+  LS.setCurrentMode("Red"); //set Sensor to use red light alone
+  
+  float[] currentSample = new float[1];
+
   while (i < 4) {
    // see the black line
-       colorID.fetchSample(newSample, 0);
 
-       if (newSample[0] - oldSample[0] > 0.11) {
+	  LS.fetchSample(currentSample, 0);
+	  
+       if (currentSample[0] < 0.27) {
     	   Sound.beepSequence();
     	   angle[i] = odometer.getXYT()[2];
 	    try {
@@ -83,9 +82,8 @@ public class LightLocalizer {
 	    
 	    i++;
        }
-       
-       oldSample[0] = newSample[0];
   }
+  
   Xminus = angle[0];
   Yplus = angle[1];
   Xplus = angle[2];
