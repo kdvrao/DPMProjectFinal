@@ -24,7 +24,7 @@ public class LightLocalizer {
  /** The Constant OFFSET. */
  private static final double OFFSET = -14;
  /** The Rotationspeed. */
- private static int Rotationspeed = 70;
+ private static int Rotationspeed = 90;
  /** The forwardspeed. */
  private static int forwardspeed = 100;
  /**
@@ -97,6 +97,14 @@ public class LightLocalizer {
   travelTo(0, 0);
   Sound.beep();
    turnTo(0);
+   DpmFinal.leftMotor
+	.rotate(-convertAngle(DpmFinal.WHEEL_RAD, DpmFinal.TRACK,
+			-45), true);
+
+DpmFinal.rightMotor
+	.rotate(convertAngle(DpmFinal.WHEEL_RAD, DpmFinal.TRACK, -45),
+			false);
+odometer.setTheta(0);
   //turnTo(19);
   
   

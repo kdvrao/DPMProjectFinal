@@ -58,7 +58,7 @@ public class UltrasonicLocalizer extends Thread /* implements Runnable */{
 	private static int A_SPEED = 100;
 
 	/** The Rotationspeed. */
-	private static int Rotationspeed = 50;
+	private static int Rotationspeed = 150;
 
 	/** The d. */
 	private int d = 40; 
